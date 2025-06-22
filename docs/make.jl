@@ -4,11 +4,11 @@ using Documenter
 makedocs(;
     modules=[ExprTools],
     authors="Curtis Vogt <curtis.vogt@gmail.com>",
-    repo="https://github.com/invenia/ExprTools.jl/blob/{commit}{path}#L{line}",
+    repo="https://github.com/JuliaTesting/ExprTools.jl/blob/{commit}{path}#L{line}",
     sitename="ExprTools.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://invenia.github.io/ExprTools.jl",
+        canonical="https://JuliaTesting.github.io/ExprTools.jl",
         assets=String[],
     ),
     pages=[
@@ -18,5 +18,5 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/invenia/ExprTools.jl",
+    repo="github.com/JuliaTesting/ExprTools.jl",
 )
