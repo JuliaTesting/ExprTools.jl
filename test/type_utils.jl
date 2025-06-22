@@ -63,7 +63,7 @@
         @test s.lb == Union{}
         @test s.ub == Any
 
-        # https://github.com/invenia/ExprTools.jl/issues/39
+        # https://github.com/JuliaTesting/ExprTools.jl/issues/39
         @testset "#39" begin
             s = signature(Tuple{Type{T},T} where {T<:Number})
             @test only(s[:whereparams]).args[1] == :T

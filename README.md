@@ -1,9 +1,9 @@
 # ExprTools
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://invenia.github.io/ExprTools.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://invenia.github.io/ExprTools.jl/dev)
-[![CI](https://github.com/Invenia/ExprTools.jl/workflows/CI/badge.svg)](https://github.com/Invenia/ExprTools.jl/actions?query=workflow%3ACI)
-[![Coverage](https://codecov.io/gh/invenia/ExprTools.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/invenia/ExprTools.jl)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaTesting.github.io/ExprTools.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaTesting.github.io/ExprTools.jl/dev)
+[![CI](https://github.com/JuliaTesting/ExprTools.jl/workflows/CI/badge.svg)](https://github.com/JuliaTesting/ExprTools.jl/actions?query=workflow%3ACI)
+[![Coverage](https://codecov.io/gh/JuliaTesting/ExprTools.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaTesting/ExprTools.jl)
 
 ExprTools provides tooling for working with Julia expressions during [metaprogramming](https://docs.julialang.org/en/v1/manual/metaprogramming/).
 This package aims to provide light-weight performant tooling without requiring additional package dependencies.

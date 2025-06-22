@@ -23,7 +23,7 @@ function test_matches(candidate::AbstractDict, target::Dict)
     haskey(target, :kwargs) && @test target[:kwargs] == get(candidate, :kwargs, nothing)
 
     # TODO: support return value declaration in signature
-    # See https://github.com/invenia/ExprTools.jl/issues/5
+    # See https://github.com/JuliaTesting/ExprTools.jl/issues/5
     haskey(target, :rtype) && @test_broken target[:rtype] == get(candidate, :rtype, nothing)
     return nothing
 end
@@ -213,7 +213,7 @@ struct TestCallableStruct end
     end
 
     # Only test on 1.3 because of issues with declaring structs in 1.0-1.2
-    # TODO: https://github.com/invenia/ExprTools.jl/issues/7
+    # TODO: https://github.com/JuliaTesting/ExprTools.jl/issues/7
     VERSION >= v"1.3" && @eval @testset "Constructors (basic)" begin
         # demo type for testing on
         struct NoParamStruct
@@ -247,7 +247,7 @@ struct TestCallableStruct end
     end
 
     # Only test on 1.3 because of issues with declaring structs in 1.0-1.2
-    # TODO: https://github.com/invenia/ExprTools.jl/issues/7
+    # TODO: https://github.com/JuliaTesting/ExprTools.jl/issues/7
     VERSION >= v"1.3" && @eval @testset "params (via Constructors with type params)" begin
         struct OneParamStruct{T}
             x::T
