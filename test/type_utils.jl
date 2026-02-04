@@ -58,7 +58,9 @@
         @test isempty(parameters(Bool))
 
         # type-vars in signatures
-        s = only(parameters(TypeVar(:T)))
+        p = parameters(TypeVar(:T))
+        @test length(p) == 1
+        s = first(p)
         @test s.name == :T
         @test s.lb == Union{}
         @test s.ub == Any
@@ -66,7 +68,9 @@
         # https://github.com/JuliaTesting/ExprTools.jl/issues/39
         @testset "#39" begin
             s = signature(Tuple{Type{T},T} where {T<:Number})
-            @test only(s[:whereparams]).args[1] == :T
+            w = s[:whereparams]
+            @test length(w) == 1
+            @test first(w).args[1] == :T
         end
     end
 end
