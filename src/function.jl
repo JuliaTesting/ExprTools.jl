@@ -1,3 +1,9 @@
+@static if !isdefined(Base, :LazyString)
+    # `LazyString` was added in Julia 1.8. On older versions fall back to eagerly
+    # building the string; correctness is preserved, only the laziness is lost.
+    LazyString(parts...) = string(parts...)
+end
+
 """
     splitdef(ex::Expr; throw::Bool=true) -> Union{Dict{Symbol,Any}, Nothing}
 
@@ -26,7 +32,10 @@ function splitdef(ex::Expr; throw::Bool=true)
 
     function invalid_def(section)
         if throw
-            msg = "Function definition contains $section\n$(sprint(Meta.dump, full_ex))"
+            msg = LazyString(
+                "Function definition contains ", section, "\n",
+                sprint(Meta.dump, full_ex),
+            )
             Base.throw(ArgumentError(msg))
         else
             nothing
@@ -34,7 +43,7 @@ function splitdef(ex::Expr; throw::Bool=true)
     end
 
     if !(ex.head === :function || ex.head === :(=) || ex.head === :(->))
-        return invalid_def("invalid function head `$(repr(ex.head))`")
+        return invalid_def(LazyString("invalid function head `", ex.head, "`"))
     end
 
     def[:head] = ex.head
@@ -48,7 +57,9 @@ function splitdef(ex::Expr; throw::Bool=true)
         ex = ex.args[1]  # Focus on the function signature
     else
         quan = length(ex.args) > 2 ? "too many" : "too few"
-        return invalid_def("$quan of expression arguments for `$(repr(def[:head]))`")
+        return invalid_def(
+            LazyString(quan, " of expression arguments for `", def[:head], "`"),
+        )
     end
 
     # Where parameters
