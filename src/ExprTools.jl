@@ -2,6 +2,7 @@ module ExprTools
 
 export args_tuple_expr, combinedef, parameters, signature, splitdef
 
+include("compat.jl")
 include("function.jl")
 include("method.jl")
 include("type_utils.jl")
