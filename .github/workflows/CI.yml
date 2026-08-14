@@ -12,13 +12,14 @@ jobs:
   test:
     name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.version == 'nightly' }}
     strategy:
       fail-fast: false
       matrix:
         version:
-          - "min"  # Project's oldest supported version
-          - "lts"  # Long-Term Stable
-          - "1"    # Latest release
+          - "min" # Project's oldest supported version
+          - "lts" # Long-Term Stable
+          - "1"   # Latest release
         os:
           - ubuntu-latest
           - macOS-latest
@@ -37,6 +38,9 @@ jobs:
           - os: ubuntu-latest
             arch: x86
             version: "1"
+          - os: ubuntu-latest
+            arch: x64
+            version: "nightly"
     steps:
       - uses: actions/checkout@v7
       - uses: julia-actions/setup-julia@v3
@@ -50,22 +54,6 @@ jobs:
       - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-
-  slack:
-    name: Notify Slack Failure
-    needs: test
-    runs-on: ubuntu-slim
-    if: ${{ !cancelled() && github.event_name == 'schedule' }}
-    steps:
-      - uses: technote-space/workflow-conclusion-action@v2
-      - uses: voxmedia/github-action-slack-notify-build@v1
-        if: env.WORKFLOW_CONCLUSION == 'failure'
-        with:
-          channel: nightly-dev
-          status: FAILED
-          color: danger
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.DEV_SLACK_BOT_TOKEN }}
 
   docs:
     name: Documentation
