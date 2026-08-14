@@ -1,3 +1,4 @@
+---
 name: JuliaNightly
 # Nightly Scheduled Julia Nightly Run
 on:
