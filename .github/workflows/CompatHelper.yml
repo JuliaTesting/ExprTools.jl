@@ -20,7 +20,7 @@ jobs:
           using Pkg
           Pkg.add("CompatHelper")
       - name: Run CompatHelper
-        shell: julia --color=yes -project=@compathelper {0}
+        shell: julia --color=yes --project=@compathelper {0}
         run: |
           using CompatHelper
           CompatHelper.main()
