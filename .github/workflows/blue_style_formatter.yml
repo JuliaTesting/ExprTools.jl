@@ -1,8 +1,7 @@
+---
 name: Format suggestions
-
 on:
-  pull_request:
-
+  pull_request: {}
 jobs:
   format:
     runs-on: ubuntu-slim
@@ -11,9 +10,16 @@ jobs:
       - uses: julia-actions/setup-julia@v3
         with:
           version: 1
-      - run: |
-          julia  -e 'using Pkg; Pkg.add("JuliaFormatter")'
-          julia  -e 'using JuliaFormatter; format(".", BlueStyle(); verbose=true)'
+      - name: Install JuliaFormatter
+        shell: julia --color=yes --project=@format {0}
+        run: |
+          using Pkg
+          Pkg.add("JuliaFormatter")
+      - name: Format
+        shell: julia --color=yes --project=@format {0}
+        run: |
+          using JuliaFormatter
+          format(".", BlueStyle(); verbose=true)
       - uses: reviewdog/action-suggester@v1
         with:
           tool_name: JuliaFormatter

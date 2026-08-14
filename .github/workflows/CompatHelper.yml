@@ -1,16 +1,29 @@
+---
 name: CompatHelper
 on:
   schedule:
-    - cron: '0 0 * * *'  # Everyday at midnight
-  workflow_dispatch:
+    - cron: "0 0 * * *"  # Everyday at midnight
+  workflow_dispatch: {}
+  pull_request:
+    paths:
+      - ".github/workflows/CompatHelper.yml"  # Self-test when workflow changes
 jobs:
   CompatHelper:
     runs-on: ubuntu-slim
     steps:
-      - name: Pkg.add("CompatHelper")
-        run: julia -e 'using Pkg; Pkg.add("CompatHelper")'
-      - name: CompatHelper.main()
+      - uses: julia-actions/setup-julia@v3
+        with:
+          version: "1"
+      - name: Install CompatHelper
+        shell: julia --color=yes --project=@compathelper {0}
+        run: |
+          using Pkg
+          Pkg.add("CompatHelper")
+      - name: Run CompatHelper
+        shell: julia --color=yes --project=@compathelper {0}
+        run: |
+          using CompatHelper
+          CompatHelper.main()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMPATHELPER_PRIV: ${{ secrets.DOCUMENTER_KEY }}
-        run: julia -e 'using CompatHelper; CompatHelper.main()'

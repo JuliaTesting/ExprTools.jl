@@ -1,24 +1,25 @@
+---
 name: CI
 # Run on master, tags, or any pull request
 on:
   schedule:
-    - cron: '0 2 * * *'  # Daily at 2 AM UTC (8 PM CST)
+    - cron: "0 2 * * *"  # Daily at 2 AM UTC (8 PM CST)
   push:
     branches: [master]
     tags: ["*"]
-  pull_request:
+  pull_request: {}
 jobs:
   test:
     name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.version == 'nightly' }}
     strategy:
       fail-fast: false
       matrix:
         version:
-          - "1.0"  # oldest supported version
-          - "1.6"  # previous LTS release
-          - "lts"
-          - "1"    # Latest Release
+          - "min" # Project's oldest supported version
+          - "lts" # Long-Term Stable
+          - "1"   # Latest release
         os:
           - ubuntu-latest
           - macOS-latest
@@ -28,9 +29,7 @@ jobs:
         exclude:
           # macOS default arch is ARM these days which requires Julia >= 1.8
           - os: macOS-latest
-            version: "1.0"
-          - os: macOS-latest
-            version: "1.6"
+            version: "min"
         include:
           # Test 32-bit only on Linux
           - os: ubuntu-latest
@@ -39,6 +38,9 @@ jobs:
           - os: ubuntu-latest
             arch: x86
             version: "1"
+          - os: ubuntu-latest
+            arch: x64
+            version: "nightly"
     steps:
       - uses: actions/checkout@v7
       - uses: julia-actions/setup-julia@v3
@@ -53,22 +55,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
-  slack:
-    name: Notify Slack Failure
-    needs: test
-    runs-on: ubuntu-slim
-    if: always() && github.event_name == 'schedule'
-    steps:
-      - uses: technote-space/workflow-conclusion-action@v2
-      - uses: voxmedia/github-action-slack-notify-build@v1
-        if: env.WORKFLOW_CONCLUSION == 'failure'
-        with:
-          channel: nightly-dev
-          status: FAILED
-          color: danger
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.DEV_SLACK_BOT_TOKEN }}
-
   docs:
     name: Documentation
     runs-on: ubuntu-latest
@@ -76,13 +62,15 @@ jobs:
       - uses: actions/checkout@v7
       - uses: julia-actions/setup-julia@v3
         with:
-          version: 'lts'
-      - run: |
-          julia --project=docs --color -e '
-            using Pkg
-            Pkg.develop(PackageSpec(path=pwd()))
-            Pkg.instantiate()
-            include("docs/make.jl")'
+          version: "lts"
+      - name: Install dependencies
+        shell: julia --color=yes --project=docs {0}
+        run: |
+          using Pkg
+          Pkg.develop(PackageSpec(path=pwd()))
+          Pkg.instantiate()
+      - name: Make docs
+        run: julia --color=yes --project=docs docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
