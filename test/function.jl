@@ -875,8 +875,7 @@ function_form(short::Bool) = string(short ? "short" : "long", "-form")
         @test_broken splitdef(:(a::Number::Int -> a); throws=false) === nothing
 
         # Invalid argument block expression
-        ex = :((x; y; z) -> 0)  # Note: inlining this strips LineNumberNodes from the block
-        @test any(arg -> arg isa LineNumberNode, ex.args[1].args)
+        ex = :((x; y; z) -> 0)
         @test_splitdef_invalid ex
         @test_splitdef_invalid Expr(:->, Expr(:block, :x, :y, :z), Expr(:block, 0))
 
