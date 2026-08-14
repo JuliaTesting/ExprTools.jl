@@ -8,30 +8,14 @@ on:
     paths:
       - ".github/workflows/JuliaNightly.yml"  # Self-test when workflow changes
 jobs:
-  version:
-    name: Resolve Julia Versions
-    # These permissions are needed to:
-    # - Checkout the Git repository (`contents: read`)
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    outputs:
-      resolved: ${{ steps.julia-version.outputs.resolved }}
-    steps:
-      - uses: julia-actions/julia-version@v0.1.0
-        id: julia-version
-        with:
-          versions: nightly
-
   test:
     name: Julia Nightly - Ubuntu - x64
-    needs: version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: julia-actions/setup-julia@v3
         with:
-          version: ${{ steps.julia-version.outputs.resolved }}
+          version: nightly
           arch: x64
       - uses: julia-actions/cache@v2
       - uses: julia-actions/julia-buildpkg@v1
