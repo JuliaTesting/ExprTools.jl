@@ -20,12 +20,13 @@ julia> ex = :(
            end
        )
 :(function Base.f(x::T, y::T) where T
+      #= none:2 =#
       #= none:3 =#
       x + y
   end)
 
 julia> def = splitdef(ex)
-Dict{Symbol,Any} with 5 entries:
+Dict{Symbol, Any} with 5 entries:
   :args        => Any[:(x::T), :(y::T)]
   :body        => quote…
   :name        => :(Base.f)
@@ -45,10 +46,11 @@ julia> eval(g_expr)
 g (generic function with 1 method)
 
 julia> g_method = first(methods(g))
-g(x::T, y::T) where T in Main
+g(x::T, y::T) where T
+     @ Main none:0
 
 julia> signature(g_method)
-Dict{Symbol,Any} with 3 entries:
+Dict{Symbol, Any} with 3 entries:
   :name        => :g
   :args        => Expr[:(x::T), :(y::T)]
   :whereparams => Any[:T]

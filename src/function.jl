@@ -84,7 +84,14 @@ function splitdef(ex::Expr; throw::Bool=true)
 
         if length(ex.args) >= i
             if ex.args[i] isa Expr && ex.args[i].head === :parameters
-                def[:kwargs] = ex.args[i].args
+                def[:kwargs] = Any[]
+                for arg in ex.args[i].args
+                    if arg isa Expr && arg.head === :parameters
+                        return invalid_def("more than one semicolon in argument list")
+                    else
+                        push!(def[:kwargs], arg)
+                    end
+                end
 
                 if length(ex.args) > i
                     def[:args] = ex.args[(i + 1):end]

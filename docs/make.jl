@@ -6,6 +6,7 @@ makedocs(;
     authors="Curtis Vogt <curtis.vogt@gmail.com>",
     repo="https://github.com/JuliaTesting/ExprTools.jl/blob/{commit}{path}#L{line}",
     sitename="ExprTools.jl",
+    checkdocs=:exports,
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
         canonical="https://JuliaTesting.github.io/ExprTools.jl",
