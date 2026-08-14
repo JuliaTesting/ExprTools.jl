@@ -16,10 +16,9 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - "1.0"  # oldest supported version
-          - "1.6"  # previous LTS release
-          - "lts"
-          - "1"    # Latest Release
+          - "min"  # Project's oldest supported version
+          - "lts"  # Long-Term Stable
+          - "1"    # Latest release
         os:
           - ubuntu-latest
           - macOS-latest
@@ -29,9 +28,7 @@ jobs:
         exclude:
           # macOS default arch is ARM these days which requires Julia >= 1.8
           - os: macOS-latest
-            version: "1.0"
-          - os: macOS-latest
-            version: "1.6"
+            version: "min"
         include:
           # Test 32-bit only on Linux
           - os: ubuntu-latest
