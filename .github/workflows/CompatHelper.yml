@@ -8,10 +8,15 @@ jobs:
   CompatHelper:
     runs-on: ubuntu-slim
     steps:
-      - name: Pkg.add("CompatHelper")
-        run: julia -e 'using Pkg; Pkg.add("CompatHelper")'
-      - name: CompatHelper.main()
+      - name: Install CompatHelper
+        shell: julia --color=yes --project=@compathelper {0}
+        run: |
+          using Pkg
+          Pkg.add("CompatHelper")
+      - name: Run CompatHelper
+        shell: julia --color=yes -project=@compathelper {0}
+          using CompatHelper
+          CompatHelper.main()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMPATHELPER_PRIV: ${{ secrets.DOCUMENTER_KEY }}
-        run: julia -e 'using CompatHelper; CompatHelper.main()'
