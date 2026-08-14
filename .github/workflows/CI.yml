@@ -9,33 +9,16 @@ on:
     tags: ["*"]
   pull_request: {}
 jobs:
-  version:
-    name: Resolve Julia Versions
-    # These permissions are needed to:
-    # - Checkout the Git repository (`contents: read`)
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    outputs:
-      json: ${{ steps.julia-version.outputs.resolved-json }}
-    steps:
-      - uses: actions/checkout@v7 # Needed for "min" to access the Project.toml
-      - uses: julia-actions/julia-version@v0.1.0
-        id: julia-version
-        with:
-          versions: |
-            - min  # Project's oldest supported version
-            - lts  # Long-Term Stable
-            - 1    # Latest release
-
   test:
     name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }}
-    needs: version
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(needs.version.outputs.json) }}
+        version:
+          - "min"  # Project's oldest supported version
+          - "lts"  # Long-Term Stable
+          - "1"    # Latest release
         os:
           - ubuntu-latest
           - macOS-latest
