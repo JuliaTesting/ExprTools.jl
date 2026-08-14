@@ -1,7 +1,7 @@
 ---
 name: Format suggestions
 on:
-  pull_request:
+  pull_request: {}
 jobs:
   format:
     runs-on: ubuntu-slim
