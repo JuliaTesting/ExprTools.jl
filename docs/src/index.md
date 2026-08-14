@@ -47,7 +47,7 @@ g (generic function with 1 method)
 
 julia> g_method = first(methods(g))
 g(x::T, y::T) where T
-    @ Main none:0
+     @ Main none:0
 
 julia> signature(g_method)
 Dict{Symbol, Any} with 3 entries:
