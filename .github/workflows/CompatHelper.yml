@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 0 * * *"  # Everyday at midnight
   workflow_dispatch: {}
+  pull_request:
+    paths:
+      - ".github/workflows/CompatHelper.yml"  # Self-test when workflow changes
 jobs:
   CompatHelper:
     runs-on: ubuntu-slim

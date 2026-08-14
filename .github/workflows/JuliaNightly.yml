@@ -4,6 +4,9 @@ name: JuliaNightly
 on:
   schedule:
     - cron: "0 2 * * *"  # Daily at 2 AM UTC (8 PM CST)
+  pull_request:
+    paths:
+      - ".github/workflows/JuliaNightly.yml"  # Self-test when workflow changes
 jobs:
   test:
     name: Julia Nightly - Ubuntu - x64
