@@ -72,5 +72,17 @@
             @test length(w) == 1
             @test first(w).args[1] == :T
         end
+
+        @static if isdefined(Core, :TypeEq)
+            @testset "Core.TypeEq" begin
+                struct TypeEqTest
+                    x
+                end
+                m = only(methods(TypeEqTest, Tuple{Any}))
+                constructor_type = first(parameters(m.sig))
+                @test constructor_type isa Core.TypeEq
+                @test collect(parameters(constructor_type)) == [TypeEqTest]
+            end
+        end
     end
 end
