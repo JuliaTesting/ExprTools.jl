@@ -8,7 +8,7 @@ e.g. `parameters(Foo{A, B, C}) == [A, B, C]`
 parameters(sig::UnionAll) = parameters(sig.body)
 # Introduced in Julia 1.14.0-DEV.2291 https://github.com/JuliaLang/julia/pull/61915
 # type_parameter is the officially supported way of doing this, and accessing directly is deprecated
-@static if isdefined(Base, :type_parameter):
+@static if isdefined(Base, :type_parameter)
     parameters(sig::DataType) = Base.type_parameter(sig)
 else
     parameters(sig::DataType) = sig.parameters
